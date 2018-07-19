@@ -17,7 +17,7 @@ import { ApolloLink } from 'apollo-client-preset'
 // import { getMainDefinition } from 'apollo-utilities'
 
 import { createHttpLink } from "apollo-link-http"
-import { setContext } from "apollo-link-context"
+// import { setContext } from "apollo-link-context"
 
 const httpLink = new createHttpLink({uri: 'http://localhost:3000/graphql'})
 

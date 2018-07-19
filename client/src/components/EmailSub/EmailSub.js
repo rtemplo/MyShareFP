@@ -1,19 +1,22 @@
 import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
-import Button from '../UI/Button'
-import Input from '../UI/Input'
-// import Spinner from '../UI/Spinner'
-import { checkValidity } from '../../shared/validation'
-import fetchEmailSubs from '../../queries/fetchEmailSubs'
 
-class Home extends Component {
+import Button from '../UI/Button/Button'
+import Input from '../UI/Input/Input'
+// import Spinner from '../UI/Spinner'
+import classes from './EmailSub.css'
+
+import { checkValidity } from '../../shared/validation'
+import createEmailSub from '../../queries/createEmailSub'
+
+class EmailSub extends Component {
   state = {
     emailSubForm: {
-      firstname: {
+      firstName: {
         elementType: 'input',
         elementConfig: {
           type: 'text',
-          placeHolder: 'First Name'
+          placeholder: 'First Name'
         },
         value: '',
         validation: {
@@ -23,11 +26,11 @@ class Home extends Component {
         valid: false,
         touched: false        
       },
-      lastname: {
+      lastName: {
         elementType: 'input',
         elementConfig: {
           type: 'text',
-          placeHolder: 'Last Name'
+          placeholder: 'Last Name'
         },
         value: '',
         validation: {
@@ -41,17 +44,17 @@ class Home extends Component {
         elementType: 'input',
         elementConfig: {
           type: 'text',
-          placeHolder: 'Valid Email Address'
-        }
-      },
-      value: '',
-      validation: {
-        required: true,
-        isEmail: true,
-        errorMessage: 'Please enter a valid email address.'
-      },
-      valid: false,
-      touched: false
+          placeholder: 'Valid Email Address'
+        },
+        value: '',
+        validation: {
+          required: true,
+          isEmail: true,
+          errorMessage: 'Please enter a valid email address.'
+        },
+        valid: false,
+        touched: false
+      }
     }
   }
 
@@ -82,10 +85,28 @@ class Home extends Component {
     this.setState({emailSubForm: updatedEmailSubForm, formIsValid: formIsValid})
   }
 
-  
+  onSubmit = (event) => {
+    event.preventDefault();
+
+    const formData = {};
+    for (let formElementIdentifier in this.state.emailSubForm) {
+      formData[formElementIdentifier] = this.state.emailSubForm[formElementIdentifier].value;
+    }
+
+    console.log(formData)
+
+    this.props.mutate({
+      variables: { 
+        ...formData
+      }
+    }).then(() => {
+      console.log('added');
+      //this.setState({first: ''});
+    });
+  }
 
   render() {
-    console.log(this.props.data)
+    // console.log(this.props.data)
 
     const formElementsArray = []
     for (let key in this.state.emailSubForm) {
@@ -96,7 +117,7 @@ class Home extends Component {
     }
 
     let form = (
-      <form onSubmit={this.orderHandler} >
+      <form onSubmit={this.onSubmit} >
         {formElementsArray.map(formElement => {
           let errorMessage = null;
           if (formElement.config.validation) {
@@ -115,7 +136,7 @@ class Home extends Component {
             changed={(event) => this.inputChangedHandler(event, formElement.id)} />
           );
         })}
-        <Button btnType="Success" disabled={!this.state.formIsValid} >ORDER</Button>
+        <Button btnType="Success" disabled={!this.state.formIsValid} >Submit</Button>
       </form>
     );    
 
@@ -129,4 +150,4 @@ class Home extends Component {
   }
 }
 
-export default graphql(fetchEmailSubs)(Home)
+export default graphql(createEmailSub)(EmailSub)
