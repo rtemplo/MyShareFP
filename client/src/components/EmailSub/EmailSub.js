@@ -121,8 +121,9 @@ class Home extends Component {
 
 
     return (
-      <div>
-        Home
+      <div className={classes.EmailSub}>
+        <h4>Enter your Contact Data</h4>
+        {form}
       </div>
     )
   }
