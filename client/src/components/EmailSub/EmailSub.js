@@ -63,7 +63,7 @@ class EmailSub extends Component {
       ...this.state.emailSubForm
     }
     /* 
-      Because the spread operator above is a shallow copy referencing sub objects 
+      Because the spread operator above is a shallow copy, referencing sub objects 
       will still point to the original object which violates the immutibility principle.
       To get around this we spread the specific sub object below.
     */
